@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @db.VarChar(255)
+  email       String   @unique @db.VarChar(255)
+  password    String   @db.VarChar(255)
+  cpf         String   @unique @db.VarChar(15)
+  permissions Int
+  order       order[]
+}
+
+model client {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  cpf       String   @unique @db.VarChar(255)
+  phone     String   @db.VarChar(255)
+  orders    order[]
+  address   address? @relation(fields: [addressId], references: [id])
+  addressId Int?
+}
+
+model address {
+  id           Int      @id @default(autoincrement())
+  street       String   @db.VarChar(255)
+  number       Int
+  complement   String?  @db.VarChar(255)
+  neighborhood String   @db.VarChar(255)
+  city         String   @db.VarChar(255)
+  state        String   @db.VarChar(255)
+  zipcode      String   @db.VarChar(255)
+  country      String   @db.VarChar(255)
+  client       client[]
+}
+
+model stock {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  name        String        @db.VarChar(255)
+  description String        @db.VarChar(255)
+  quantity    Float
+  order       order_stock[]
+}
+
+model order {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  name        String        @db.VarChar(255)
+  description String        @db.VarChar(255)
+  status      Int
+  stock       order_stock[]
+  user        user?         @relation(fields: [userId], references: [id])
+  userId      Int?
+  client      client?       @relation(fields: [clientId], references: [id])
+  clientId    Int?
+}
+
+model order_stock {
+  stock    stock @relation(fields: [stockId], references: [id])
+  stockId  Int
+  order    order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId  Int
+  quantity Float
+
+  @@id([orderId, stockId])
+}
