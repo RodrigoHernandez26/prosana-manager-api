@@ -7,7 +7,19 @@ import cors from 'cors';
 const app = express()
 const PORT = process.env.PORT
 
-app.use(cors())
+const whitelist = ['http://localhost:4200']
+const corsOptions = {
+    credentials: true,
+    origin: (origin: any, callback: any) => {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
+}
+
+app.use(cors(corsOptions))
 app.use(helmet())
 app.use(cookieParser())
 app.use(express.json())
