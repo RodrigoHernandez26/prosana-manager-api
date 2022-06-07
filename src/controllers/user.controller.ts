@@ -11,7 +11,8 @@ export const getAllUsers = async (req: Request, res: Response) => {
             select: {
                 name: true,
                 email: true,
-                cpf: true
+                cpf: true,
+                permissions: true
             }
         })
 
@@ -37,7 +38,8 @@ export const getUserInfo = async (req: Request, res: Response) => {
             select: {
                 name: true,
                 email: true,
-                cpf: true
+                cpf: true,
+                permissions: true
             }
         })
         if (!user) throw new Error('USER_NOT_FOUND')
