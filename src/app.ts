@@ -2,10 +2,12 @@ require('dotenv').config();
 import express from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const app = express()
 const PORT = process.env.PORT
 
+app.use(cors())
 app.use(helmet())
 app.use(cookieParser())
 app.use(express.json())
