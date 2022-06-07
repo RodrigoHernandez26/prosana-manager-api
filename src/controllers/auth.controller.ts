@@ -58,31 +58,6 @@ export const login = async (req: Request, res: Response) => {
     }
 }
 
-export const authUser = async (req: Request, res: Response) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: { id: req.authData!.id },
-            select: {
-                name: true,
-                email: true,
-                cpf: true
-            }
-        })
-
-        return res.status(200).json({
-            success: true,
-            user
-        })
-
-    } catch (error: any) {
-        res.clearCookie("access_token")
-        return res.status(500).json({
-            success: false,
-            message: 'Erro desconhecido na autenticação. Tente logar novamente.'
-        })            
-    }
-}
-
 export const logout = async (req: Request, res: Response) => {
     res.clearCookie("access_token")
     return res.status(200).json({
