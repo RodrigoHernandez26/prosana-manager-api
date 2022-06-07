@@ -20,6 +20,10 @@ export const createOrderSchema = yup.object().shape({
         .truncate()
         .required("MISSING_CLIENT_ID"),
 
+    price: yup.number()
+        .positive("INVALID_PRICE")
+        .required("MISSING_PRICE"),
+
     stock: yup.array().of(
         yup.object().shape({
             id: yup.number()
@@ -54,6 +58,9 @@ export const updateOrderSchema = yup.object().shape({
     status: yup.number()
         .positive("INVALID_STATUS")
         .max(3, "INVALID_STATUS"),
+
+    price: yup.number()
+        .positive("INVALID_PRICE"),
 
     clientId: yup.number()
         .positive("INVALID_CLIENT_ID")

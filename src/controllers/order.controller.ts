@@ -167,7 +167,13 @@ export const createOrder = async (req: Request, res: Response) => {
             case 'MISSING_QUANTITY':
                 return res.status(400).json({
                     success: false,
-                    message: 'É necessário informar uma quantidade válida para o produto.'
+                    message: 'É necessário informar uma quantidade válida para o pedido.'
+                })
+            case 'INVALID_PRICE':
+            case 'MISSING_PRICE':
+                return res.status(400).json({
+                    success: false,
+                    message: 'É necessário informar um preço válido para o pedido.'
                 })
             case 'MISSING_STOCK':
                 return res.status(400).json({
@@ -265,6 +271,11 @@ export const updateOrder = async (req: Request, res: Response) => {
                 return res.status(400).json({
                     success: false,
                     message: 'Não há quantidades suficientes do(s) produto no estoque. Verifique o estoque e tente novamente.'
+                })
+            case 'INVALID_PRICE':
+                return res.status(400).json({
+                    success: false,
+                    message: 'É necessário informar um preço válido para o pedido.'
                 })
             default:
                 console.log(error)
