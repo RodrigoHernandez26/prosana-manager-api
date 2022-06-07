@@ -27,7 +27,9 @@ export const login = async (req: Request, res: Response) => {
 
         return res
             .cookie('access_token', token, {
-                httpOnly: true
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true
             })
             .status(200)
             .json({
