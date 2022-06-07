@@ -45,7 +45,7 @@ export const login = async (req: Request, res: Response) => {
                 })
             case 'USER_NOT_FOUND':
             case 'INVALID_PASSWORD':
-                return res.status(401).json({
+                return res.status(200).json({
                     success: false,
                     message: 'Login inválido. Certifique-se que o email e a senha estão corretos.'
                 })
