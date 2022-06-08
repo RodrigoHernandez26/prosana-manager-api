@@ -17,7 +17,7 @@ export const login = async (req: Request, res: Response) => {
 
         const user = await prisma.user.findUnique({
             where: { email },
-            select: { id: true, password: true }
+            select: { id: true, password: true, name: true }
         })
 
         if (!user) throw new Error('USER_NOT_FOUND')
@@ -35,10 +35,15 @@ export const login = async (req: Request, res: Response) => {
             .json({
                 success: true,
                 message: 'Login realizado com sucesso!',
+                user: { name: user.name }
             })
 
     } catch (error: any) {
-        res.clearCookie("access_token")
+        res.clearCookie("access_token", {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true
+        })
         switch (error.message) {
             case 'MISSING_FIELDS':
                 return res.status(400).json({
@@ -61,7 +66,11 @@ export const login = async (req: Request, res: Response) => {
 }
 
 export const logout = async (req: Request, res: Response) => {
-    res.clearCookie("access_token")
+    res.clearCookie("access_token", {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true
+    })
     return res.status(200).json({
         success: true,
         message: 'Logout realizado com sucesso!'

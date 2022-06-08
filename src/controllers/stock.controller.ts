@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { createStockSchema, updateStockSchema } from "../schemas/stock.schemas";
 
 const prisma = new PrismaClient()
@@ -162,6 +162,14 @@ export const deleteStock = async (req: Request, res: Response) => {
                     message: 'Houve um erro ao deletar o produto. Por favor, entre em contato com o administrador do sistema.'
                 })
             default:
+                console.log(error)
+                if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Existe um pedido com esse produto!"
+                    })
+                }
+
                 return res.status(500).json({
                     success: false,
                     message: 'Erro desconhecido ao deletar o produto. Por favor, entre em contato com o administrador do sistema.'

@@ -21,10 +21,14 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
         next()
 
     } catch (error: any) {
-        res.clearCookie("access_token")
+        res.clearCookie("access_token", {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true
+        })
         switch (error.message) {
             case 'USER_NOT_FOUND':
-                return res.status(404).json({
+                return res.status(401).json({
                     success: false,
                     message: 'Usuário não encontrado. tente relogar no sistema.'
                 })
@@ -71,7 +75,11 @@ export const verifyPermission = async (req: Request, res: Response, next: NextFu
     } catch (error: any) {
         switch (error.message) {
             case 'USER_NOT_FOUND':
-                res.clearCookie("access_token")
+                res.clearCookie("access_token", {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    secure: true
+                })
                 return res.status(401).json({
                     success: false,
                     message: 'Login inválido. Tente logar novamente.'

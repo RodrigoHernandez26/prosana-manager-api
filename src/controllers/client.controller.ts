@@ -6,7 +6,9 @@ const prisma = new PrismaClient()
 
 export const getAllClients = async (req: Request, res: Response) => {
     try {
-        const clients = await prisma.client.findMany()
+        const clients = await prisma.client.findMany({
+            include: { address: true }
+        })
 
         return res.status(200).json({
             success: true,
@@ -248,6 +250,13 @@ export const deleteClient = async (req: Request, res: Response) => {
                     message: 'Houve um erro ao deletar o cliente. Por favor, entre em contato com o administrador do sistema.'
                 })
             default:
+                if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Esse cliente tem um pedido!"
+                    })
+                }
+
                 return res.status(500).json({
                     success: false,
                     message: 'Erro desconhecido ao deletar o cliente. Por favor, entre em contato com o administrador do sistema.'
