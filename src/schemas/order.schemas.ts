@@ -56,7 +56,7 @@ export const updateOrderSchema = yup.object().shape({
         .max(255),
 
     status: yup.number()
-        .positive("INVALID_STATUS")
+        .min(0, "INVALID_STATUS")
         .max(3, "INVALID_STATUS"),
 
     price: yup.number()
