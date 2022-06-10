@@ -7,7 +7,7 @@ import cors from 'cors';
 const app = express()
 const PORT = process.env.PORT
 
-const whitelist = ['http://localhost:4200']
+const whitelist = ['http://localhost:4200', 'https://prosana-manager.rodrigoh.dev']
 const corsOptions = {
     credentials: true,
     origin: (origin: any, callback: any) => {
